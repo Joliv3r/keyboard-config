@@ -26,10 +26,36 @@ enum layers {
     _FN
 };
 
+
+enum tap_dances {
+  TD_LAYERS
+};
+
+
+void switch_between_layers(tap_dance_state_t *state, void *user_data) {
+  switch (state->count) {
+    case 1:
+      layer_move(_BASE);
+      break;
+    case 2:
+      layer_move(_CLMK);
+      break;
+    case 3:
+      layer_move(_NUM);
+      break;
+    default:
+      break;
+  }
+}
+
+tap_dance_action_t tap_dance_actions[] = {
+    [TD_LAYERS] = ACTION_TAP_DANCE_FN(switch_between_layers)
+};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BASE] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                             ,-----------------------------------------------------.
-      XXXXXXX,         KC_Q,         KC_W,       KC_E,           KC_R,    KC_T,          KC_Y,         KC_U,         KC_I,         KC_O,           KC_P,  KC_MINS,
+      TD(TD_LAYERS),         KC_Q,         KC_W,       KC_E,           KC_R,    KC_T,          KC_Y,         KC_U,         KC_I,         KC_O,           KC_P,  KC_MINS,
   //|--------+--------+--------+--------+--------+--------|                             |--------+--------+--------+--------+--------+--------|
       XXXXXXX, LGUI_T(KC_A), LALT_T(KC_S), LCTL_T(KC_D), LSFT_T(KC_F),    KC_G,          KC_H, RSFT_T(KC_J), LCTL_T(KC_K), LALT_T(KC_L), LGUI_T(KC_SCLN), KC_QUOT,
   //|--------+--------+--------+--------+--------+--------|                             |--------+--------+--------+--------+--------+--------|
@@ -40,7 +66,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_CLMK] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                             ,-----------------------------------------------------.
-      XXXXXXX,         KC_Q,         KC_W,       KC_F,           KC_P,    KC_B,          KC_J,         KC_L,         KC_U,         KC_Y,           KC_SCLN,  KC_MINS,
+      TD(TD_LAYERS),         KC_Q,         KC_W,       KC_F,           KC_P,    KC_B,          KC_J,         KC_L,         KC_U,         KC_Y,           KC_SCLN,  KC_MINS,
   //|--------+--------+--------+--------+--------+--------|                             |--------+--------+--------+--------+--------+--------|
       XXXXXXX, LGUI_T(KC_A), LALT_T(KC_R), LCTL_T(KC_S), LSFT_T(KC_T),    KC_G,          KC_M, LSFT_T(KC_N), LCTL_T(KC_E), LALT_T(KC_I), LGUI_T(KC_O), KC_QUOT,
   //|--------+--------+--------+--------+--------+--------|                             |--------+--------+--------+--------+--------+--------|
@@ -51,7 +77,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_NUM] = LAYOUT_split_3x6_3(
   //.-------------------------------------------------------------------.               .-------------------------------------------------------------------.
-      XXXXXXX,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,              KC_PAST,      KC_7,       KC_8,       KC_9,       KC_NO,      XXXXXXX,
+      TD(TD_LAYERS),      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,              KC_PAST,      KC_7,       KC_8,       KC_9,       KC_NO,      XXXXXXX,
   //|-------------------------------------------------------------------|               |-------------------------------------------------------------------|
       XXXXXXX,      KC_LGUI,    KC_LALT,    KC_LCTL,    KC_LSFT,    KC_NO,              KC_PSLS,      KC_4,       KC_5,       KC_6,       KC_PENT,      XXXXXXX,
   //|-------------------------------------------------------------------|               |-------------------------------------------------------------------|
@@ -73,11 +99,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_NAV] = LAYOUT_split_3x6_3(
   //.-------------------------------------------------------------------.               .-------------------------------------------------------------------.
-      DF(_CLMK),      KC_NO,     KC_NO,      KC_NO,      KC_NO,      KC_NO,              KC_HOME,    KC_PGDN,    KC_PGUP,    KC_END,     KC_BRIU,    XXXXXXX,
+      XXXXXXX,      KC_NO,     KC_NO,      KC_NO,      KC_NO,      KC_NO,              KC_HOME,    KC_PGDN,    KC_PGUP,    KC_END,     KC_BRIU,    XXXXXXX,
   //|-------------------------------------------------------------------|               |-------------------------------------------------------------------|
-      DF(_BASE),      KC_LGUI,    KC_LALT,    KC_LCTL,    KC_LSFT,    KC_NO,              KC_LEFT,    KC_DOWN,    KC_UP,      KC_RIGHT,   KC_MUTE,    XXXXXXX,
+      XXXXXXX,      KC_LGUI,    KC_LALT,    KC_LCTL,    KC_LSFT,    KC_NO,              KC_LEFT,    KC_DOWN,    KC_UP,      KC_RIGHT,   KC_MUTE,    XXXXXXX,
   //|-------------------------------------------------------------------|               |-------------------------------------------------------------------|
-      TG(_NUM),      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,              KC_MPRV,    KC_VOLD,    KC_VOLU,    KC_MNXT,    KC_BRID,    XXXXXXX,
+      XXXXXXX,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,              KC_MPRV,    KC_VOLD,    KC_VOLU,    KC_MNXT,    KC_BRID,    XXXXXXX,
   //|-------------------------------------------------------------------|               |-------------------------------------------------------------------|
                                             XXXXXXX,    XXXXXXX,     XXXXXXX,              KC_MPLY,    KC_DEL,     XXXXXXX
   ),
