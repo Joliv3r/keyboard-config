@@ -21,6 +21,7 @@ enum layers {
     _BASE,
     _CLMK,
     _NUM,
+    _NO,
     _SYM,
     _NAV,
     _FN
@@ -38,10 +39,13 @@ void switch_between_layers(tap_dance_state_t *state, void *user_data) {
       layer_move(_BASE);
       break;
     case 2:
-      layer_move(_CLMK);
+      layer_move(_NO);
       break;
     case 3:
       layer_move(_NUM);
+      break;
+    case 4:
+      layer_move(_CLMK);
       break;
     default:
       break;
@@ -93,6 +97,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       XXXXXXX,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,              KC_NO,      KC_1,       KC_2,       KC_3,       KC_SLSH,      XXXXXXX,
   //|-------------------------------------------------------------------|               |-------------------------------------------------------------------|
                                             XXXXXXX,    XXXXXXX, MO(_NAV),              KC_BSPC,    KC_0,       XXXXXXX
+  ),
+
+    [_NO] = LAYOUT_split_3x6_3(
+  //,-----------------------------------------------------.                             ,-----------------------------------------------------.
+      TD(TD_LAYERS),         KC_Q,         KC_W,       KC_E,           KC_R,    KC_T,          KC_Y,         KC_U,         KC_I,         KC_O,           KC_P,  KC_LBRC,
+  //|--------+--------+--------+--------+--------+--------|                             |--------+--------+--------+--------+--------+--------|
+      XXXXXXX, LGUI_T(KC_A), LALT_T(KC_S), LCTL_T(KC_D), LSFT_T(KC_F),    KC_G,          KC_H, RSFT_T(KC_J), LCTL_T(KC_K), LALT_T(KC_L), LGUI_T(KC_SCLN), KC_QUOT,
+  //|--------+--------+--------+--------+--------+--------|                             |--------+--------+--------+--------+--------+--------|
+      XXXXXXX,         KC_Z,         KC_X,       KC_C,           KC_V,    KC_B,          KC_N,         KC_M,      KC_COMM,       KC_DOT,         KC_SLSH,  KC_ESC,
+  //|--------+--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------+--------|
+                            LGUI_T(KC_DEL), LT(_NUM, KC_BSPC), LT(_NAV, KC_ENT),           LT(_FN, KC_TAB), LT(_SYM, KC_SPC),  RALT_T(KC_ESC)
   ),
 
     [_SYM] = LAYOUT_split_3x6_3(
