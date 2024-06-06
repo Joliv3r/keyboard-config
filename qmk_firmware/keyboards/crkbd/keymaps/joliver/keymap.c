@@ -20,8 +20,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 enum layers {
     _BASE,
     _CLMK,
-    _NUM,
     _NO,
+    _NUM,
     _SYM,
     _NAV,
     _FN
@@ -56,6 +56,28 @@ tap_dance_action_t tap_dance_actions[] = {
     [TD_LAYERS] = ACTION_TAP_DANCE_FN(switch_between_layers)
 };
 
+enum unicode_names {
+  U_AE_LOWER,
+  U_AE_UPPER,
+  U_OE_LOWER,
+  U_OE_UPPER,
+  U_AA_LOWER,
+  U_AA_UPPER
+};
+
+const uint32_t PROGMEM unicode_map[] = {
+  [U_AE_LOWER] = 0x00E6,
+  [U_AE_UPPER] = 0x00C6,
+  [U_OE_LOWER] = 0x00F8,
+  [U_OE_UPPER] = 0x00D8,
+  [U_AA_LOWER] = 0x00E5,
+  [U_AA_UPPER] = 0x00C5
+};
+
+#define U_AE UP(U_AE_LOWER, U_AE_UPPER)
+#define U_OE UP(U_OE_LOWER, U_OE_UPPER)
+#define U_AA UP(U_AA_LOWER, U_AA_UPPER)
+
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case QK_TAP_DANCE ... QK_TAP_DANCE_MAX:
@@ -88,17 +110,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                             LGUI_T(KC_DEL), LT(_NUM, KC_BSPC), LT(_NAV, KC_ENT),           LT(_FN, KC_TAB), LT(_SYM, KC_SPC),  RALT_T(KC_ESC)
   ),
 
-    [_NUM] = LAYOUT_split_3x6_3(
-  //.-------------------------------------------------------------------.               .-------------------------------------------------------------------.
-      TD(TD_LAYERS),      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,              KC_PAST,      KC_7,       KC_8,       KC_9,       KC_NO,      XXXXXXX,
-  //|-------------------------------------------------------------------|               |-------------------------------------------------------------------|
-      XXXXXXX,      KC_LGUI,    KC_LALT,    KC_LCTL,    KC_LSFT,    KC_NO,              KC_PSLS,      KC_4,       KC_5,       KC_6,       KC_PENT,      XXXXXXX,
-  //|-------------------------------------------------------------------|               |-------------------------------------------------------------------|
-      XXXXXXX,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,              KC_NO,      KC_1,       KC_2,       KC_3,       KC_SLSH,      XXXXXXX,
-  //|-------------------------------------------------------------------|               |-------------------------------------------------------------------|
-                                            XXXXXXX,    XXXXXXX, MO(_NAV),              KC_BSPC,    KC_0,       XXXXXXX
-  ),
-
     [_NO] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                             ,-----------------------------------------------------.
       TD(TD_LAYERS),         KC_Q,         KC_W,       KC_E,           KC_R,    KC_T,          KC_Y,         KC_U,         KC_I,         KC_O,           KC_P,  KC_LBRC,
@@ -110,14 +121,25 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                             LGUI_T(KC_DEL), LT(_NUM, KC_BSPC), LT(_NAV, KC_ENT),           LT(_FN, KC_TAB), LT(_SYM, KC_SPC),  RALT_T(KC_ESC)
   ),
 
+    [_NUM] = LAYOUT_split_3x6_3(
+  //.-------------------------------------------------------------------.               .-------------------------------------------------------------------.
+      TD(TD_LAYERS),      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,              KC_PAST,      KC_7,       KC_8,       KC_9,       KC_NO,      XXXXXXX,
+  //|-------------------------------------------------------------------|               |-------------------------------------------------------------------|
+      XXXXXXX,      KC_LGUI,    KC_LALT,    KC_LCTL,    KC_LSFT,    KC_NO,              KC_PSLS,      KC_4,       KC_5,       KC_6,       KC_PENT,      XXXXXXX,
+  //|-------------------------------------------------------------------|               |-------------------------------------------------------------------|
+      XXXXXXX,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,              KC_NO,      KC_1,       KC_2,       KC_3,       KC_SLSH,      XXXXXXX,
+  //|-------------------------------------------------------------------|               |-------------------------------------------------------------------|
+                                            XXXXXXX,    XXXXXXX, MO(_NAV),              KC_BSPC,    KC_0,       XXXXXXX
+  ),
+
     [_SYM] = LAYOUT_split_3x6_3(
   //.--------------------------------------------------------------------.              .-------------------------------------------------------------------.
       XXXXXXX,      KC_NO,      KC_LPRN,    KC_RPRN,    S(KC_QUOT), KC_QUOT,              KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      XXXXXXX,
   //.---------------------------   (   -----    )  -----    "   ----  '  |              |-------------------------------------------------------------------|
-      XXXXXXX,      KC_BSLS,    KC_LBRC,    KC_RBRC,    KC_EQL,     KC_GRV,             KC_NO,      KC_LSFT,    KC_LCTL,    KC_LALT,    KC_LGUI,    XXXXXXX,
-  //.---------------  \|   -----   [{  -----   ]}  -----  =+   -----  `~ |              |-------------------------------------------------------------------|
-      XXXXXXX,      KC_NO,      KC_LABK,      KC_RABK,      KC_MINS,    KC_NO,              KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      XXXXXXX,
-  //.---------------------------------------------------   -_  ----------|              |-------------------------------------------------------------------|
+      XXXXXXX,      KC_BSLS,    KC_LBRC,    KC_RBRC,    KC_EQL,     S(KC_BSLS),             KC_NO,      KC_LSFT,    KC_LCTL,    KC_LALT,    KC_LGUI,    XXXXXXX,
+  //.---------------  \|   -----   [{  -----   ]}  -----  =+   -------  |              |-------------------------------------------------------------------|
+      XXXXXXX,      KC_NO,      KC_LABK,      KC_RABK,      KC_MINS,    KC_GRV,              KC_NO,      KC_NO,      KC_NO,      KC_NO,      KC_NO,      XXXXXXX,
+  //.---------------------------------------------------   -_  ------  `~ |              |-------------------------------------------------------------------|
                                             XXXXXXX,    KC_ESC,     KC_BSPC,            XXXXXXX,      XXXXXXX,      XXXXXXX
   ),
 
